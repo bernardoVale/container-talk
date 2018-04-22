@@ -6,7 +6,9 @@ class: center, bottom
 ???
 Present yourself
 ---
-class: center, bottom
+class: middle, right, fit-image
+layout: false
+background-image: url(http://localhost:8000/images/container.jpg)
 
 # What is a container?
 
@@ -57,6 +59,7 @@ class: center, middle
 - Linux Namespaces
 - CGroups
 
---
-
-_Talk is cheap, show me the code - Torvalds, Linus
+---
+class: top, right, fit-image
+layout: false
+background-image: url(http://localhost:8000/images/talkischeap.jpg)
