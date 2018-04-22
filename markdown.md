@@ -70,4 +70,4 @@ https://medium.com/@teddyking/namespaces-in-go-basics-e3f0fc1ff69a
 
 https://www.toptal.com/linux/separation-anxiety-isolating-your-system-with-linux-namespaces
 
-https://www.youtube.com/watch?v=MHv6cWjvQjM&t=1316s
+https://www.youtube.com/watch?v=MHv6cWjvQjM&t=1316sw
