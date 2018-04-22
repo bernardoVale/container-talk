@@ -63,3 +63,11 @@ class: center, middle
 class: top, right, fit-image
 layout: false
 background-image: url(http://localhost:8000/images/talkischeap.jpg)
+
+https://www.linxlabs.com/namespaces-go-part-3-proc-mount/
+
+https://medium.com/@teddyking/namespaces-in-go-basics-e3f0fc1ff69a
+
+https://www.toptal.com/linux/separation-anxiety-isolating-your-system-with-linux-namespaces
+
+https://www.youtube.com/watch?v=MHv6cWjvQjM&t=1316s
