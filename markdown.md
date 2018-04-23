@@ -22,6 +22,9 @@ class: center, middle
 
 
 ???
+- Ability to mimic environments easily (works in my machine)
+- Immutable Infrastructure
+
 Talk about immutable infrastructure
 talk about Pets x cattle
 
