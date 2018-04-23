@@ -42,11 +42,11 @@ func parent() {
 	cmd.Stderr = os.Stderr
 
 	cmd.SysProcAttr = &syscall.SysProcAttr{
-		Cloneflags:   syscall.CLONE_NEWUTS | syscall.CLONE_NEWPID | syscall.CLONE_NEWNS | syscall.CLONE_NEWNET,
+		Cloneflags:   syscall.CLONE_NEWUTS | syscall.CLONE_NEWPID | syscall.CLONE_NEWNS,
 		Unshareflags: syscall.CLONE_NEWNS,
 	}
 	must(cmd.Run())
-
+	//Show springboot is acessible in the host, now lets set a network ns
 }
 
 // Exit with status code 1 in case of failure

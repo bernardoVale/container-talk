@@ -1,7 +1,7 @@
 Building a container from scratch
 =======================
 
-Kubernetes introduction for those not interested in managing a cluster.
+A very different way to introduce Docker
 
 To run this presentation execute:
 

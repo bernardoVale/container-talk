@@ -46,7 +46,7 @@ func parent() {
 		Unshareflags: syscall.CLONE_NEWNS,
 	}
 	must(cmd.Run())
-
+	//After that show that how we can use user ns to start the container with unprivilege user
 }
 
 // Exit with status code 1 in case of failure

@@ -34,9 +34,9 @@ Vagrant.configure("2") do |config|
     vb.memory = "2046"
     vb.cpus = 4
   end
-  
+
   config.vm.provision "shell", inline: <<-SHELL
     apt-get update
-    apt-get install -y apache2
+    hostname bvale-ubuntu
   SHELL
 end
