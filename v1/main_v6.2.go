@@ -26,7 +26,7 @@ func child() {
 
 	must(syscall.Sethostname([]byte("container")))
 
-	must(syscall.Chroot("fs/springboot"))
+	must(syscall.Chroot("fs/ubuntu"))
 	must(os.Chdir("/"))
 	must(syscall.Mount("proc", "/proc", "proc", 0, ""))
 	must(os.MkdirAll("/bar", 0755))
@@ -48,10 +48,11 @@ func parent() {
 	cmd.Stderr = os.Stderr
 
 	cmd.SysProcAttr = &syscall.SysProcAttr{
-		Cloneflags: syscall.CLONE_NEWUTS | syscall.CLONE_NEWPID | syscall.CLONE_NEWNS | syscall.CLONE_NEWNET,
+		Cloneflags: syscall.CLONE_NEWUTS | syscall.CLONE_NEWPID | syscall.CLONE_NEWNS,
 	}
 	must(cmd.Run())
-	//After that show that how we can use user ns to start the container with unprivilege user
+	// Show that we cant see mountpoitns of host
+	// Start an app and curl request to it
 }
 
 // Exit with status code 1 in case of failure

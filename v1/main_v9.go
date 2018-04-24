@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
-	"path/filepath"
 	"syscall"
 )
 
@@ -15,7 +14,7 @@ func main() {
 	case "child":
 		child()
 	default:
-		panic("What?")
+		panic("back off")
 	}
 }
 
@@ -25,98 +24,31 @@ func child() {
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 
-	image := "/usr/src/fs/learn"
+	must(syscall.Sethostname([]byte("container")))
 
-	must(mountProc(image))
-	must(pivotRoot(image))
-	// must(syscall.Mount("proc", "/usr/src/fs/learn/proc", "proc", 0, ""))
-	// must(syscall.Chroot("/usr/src/fs/learn"))
+	must(syscall.Chroot("fs/springboot"))
 	must(os.Chdir("/"))
+	must(syscall.Mount("proc", "/proc", "proc", 0, ""))
+	must(os.MkdirAll("/bar", 0755))
+	must(syscall.Mount("foo", "bar", "tmpfs", 0, ""))
+
 	must(cmd.Run())
 
 	must(syscall.Unmount("proc", 0))
-}
-
-func mountProc(newroot string) error {
-	source := "proc"
-	target := filepath.Join(newroot, "/proc")
-	fstype := "proc"
-	flags := 0
-	data := ""
-
-	os.MkdirAll(target, 0755)
-	if err := syscall.Mount(
-		source,
-		target,
-		fstype,
-		uintptr(flags),
-		data,
-	); err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func pivotRoot(newroot string) error {
-	putold := filepath.Join(newroot, "/.pivot_root")
-
-	// bind mount newroot to itself - this is a slight hack
-	// needed to work around a pivot_root requirement
-	if err := syscall.Mount(
-		newroot,
-		newroot,
-		"",
-		syscall.MS_BIND|syscall.MS_REC,
-		"",
-	); err != nil {
-		return err
-	}
-
-	// create putold directory
-	if err := os.MkdirAll(putold, 0700); err != nil {
-		return err
-	}
-
-	// call pivot_root
-	if err := syscall.PivotRoot(newroot, putold); err != nil {
-		return err
-	}
-
-	// ensure current working directory is set to new root
-	if err := os.Chdir("/"); err != nil {
-		return err
-	}
-
-	// umount putold, which now lives at /.pivot_root
-	putold = "/.pivot_root"
-	if err := syscall.Unmount(
-		putold,
-		syscall.MNT_DETACH,
-	); err != nil {
-		return err
-	}
-
-	// remove putold
-	if err := os.RemoveAll(putold); err != nil {
-		return err
-	}
-
-	return nil
+	must(syscall.Unmount("bar", 0))
 }
 
 func parent() {
-	fmt.Printf("running %v\n", os.Args[2:])
+	fmt.Printf("Running %v\n", os.Args[2:])
 
 	cmd := exec.Command("/proc/self/exe", append([]string{"child"}, os.Args[2:]...)...)
+
 	cmd.Stdin = os.Stdin
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 
 	cmd.SysProcAttr = &syscall.SysProcAttr{
-		Cloneflags:   syscall.CLONE_NEWUSER | syscall.CLONE_NEWUTS | syscall.CLONE_NEWPID | syscall.CLONE_NEWNS | syscall.CLONE_NEWNET,
-		Unshareflags: syscall.CLONE_NEWNS,
-		Credential:   &syscall.Credential{Uid: 0, Gid: 0},
+		Cloneflags: syscall.CLONE_NEWUTS | syscall.CLONE_NEWPID | syscall.CLONE_NEWNS | syscall.CLONE_NEWNET | syscall.CLONE_NEWUSER,
 		UidMappings: []syscall.SysProcIDMap{
 			{
 				ContainerID: 0,
@@ -133,7 +65,6 @@ func parent() {
 		},
 	}
 	must(cmd.Run())
-
 }
 
 // Exit with status code 1 in case of failure

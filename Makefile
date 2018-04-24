@@ -1,4 +1,4 @@
-.PHONY: container
+.PHONY: container export
 
 run:
 	python2 -m SimpleHTTPServer 8000

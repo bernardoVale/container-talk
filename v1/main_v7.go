@@ -14,7 +14,7 @@ func main() {
 	case "child":
 		child()
 	default:
-		panic("What?")
+		panic("back off")
 	}
 }
 
@@ -24,26 +24,31 @@ func child() {
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 
+	must(syscall.Sethostname([]byte("container")))
+
 	must(syscall.Chroot("fs/springboot"))
-	must(syscall.Mount("proc", "/proc", "proc", 0, ""))
 	must(os.Chdir("/"))
+	must(syscall.Mount("proc", "/proc", "proc", 0, ""))
+	must(os.MkdirAll("/bar", 0755))
+	must(syscall.Mount("foo", "bar", "tmpfs", 0, ""))
 
 	must(cmd.Run())
 
 	must(syscall.Unmount("proc", 0))
+	must(syscall.Unmount("bar", 0))
 }
 
 func parent() {
-	fmt.Printf("running %v\n", os.Args[2:])
+	fmt.Printf("Running %v\n", os.Args[2:])
 
 	cmd := exec.Command("/proc/self/exe", append([]string{"child"}, os.Args[2:]...)...)
+
 	cmd.Stdin = os.Stdin
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 
 	cmd.SysProcAttr = &syscall.SysProcAttr{
-		Cloneflags:   syscall.CLONE_NEWUTS | syscall.CLONE_NEWPID | syscall.CLONE_NEWNS,
-		Unshareflags: syscall.CLONE_NEWNS,
+		Cloneflags: syscall.CLONE_NEWUTS | syscall.CLONE_NEWPID | syscall.CLONE_NEWNS,
 	}
 	must(cmd.Run())
 	//Show springboot is acessible in the host, now lets set a network ns
