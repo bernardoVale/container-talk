@@ -16,53 +16,62 @@ background-image: url(http://localhost:8000/images/container.jpg)
 Ask audiance what they think is a container
 
 ---
+class: middle, right, fit-image
+layout: false
+background-image: url(http://localhost:8000/images/lightweight.jpg)
+---
+
 class: center, middle
 
 # Why do we need a container?
 
 
 ???
-Talk about immutable infrastructure
-talk about Pets x cattle
+- (WORKS IN MY MACHINE) AVOID CONFIGURATION DRIFT
+- (HARDWARE UTILIZATION) BETTER RESOURCE UTILIZATION
+- (SPIKE TRAFFIC CASE) FASTER STARTUP
 
 ---
-# Pets - Legacy
 
-- We given them names, they are unique,
-- We love and care and whey they get ill we nurse them.
-
---
-
-???
-We reconfigure the infrastructure
-
-Configuration drift = Even with very good cfg management this will happen
-
----
-# Cattle
-
-- We givem them a number
-- If they get ill we
-
-???
-Designed for failure
-Replecable
-
----
 class: center, middle
 # Guess what? Container is not a kernel primitive!
 
 ---
+class: middle, right, fit-image
+layout: false
+background-image: url(http://localhost:8000/images/fancy.jpg)
 
-# A Container is a group of functionalities provided by the Linux Kernel
+---
+# What you need to know before we start
 
-- Linux Namespaces
-- CGroups
+- In linuxland everything is a file
+
+--
+
+- Linux is the kernel and the rest is just a bunch of needed apps to run ur app
+
+--
+
+- A **syscall** is basically an API request to the kernel
+
+--
+
+- In linux a process can have childs but a child has only one parent (that's why its called, guess what, a process tree)
 
 ---
 class: top, right, fit-image
 layout: false
 background-image: url(http://localhost:8000/images/talkischeap.jpg)
+
+---
+class: top, right, fit-image
+layout: false
+background-image: url(http://localhost:8000/images/docker.jpg)
+
+???
+- COLLABORATION
+- IMMUTABLE INFRASTRUCTURE MADE EASY
+- START BUILDING UR APP ENV
 
 https://www.linxlabs.com/namespaces-go-part-3-proc-mount/
 
